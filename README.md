@@ -31,6 +31,19 @@
 <!-- ABOUT THE PROJECT -->
 ## **_PS: I recommend you to use google collab to run the code._** 
 
+## Run the app
+```bash 
+docker build -t thekenken/topic-modeling-demo:latest . && docker push thekenken/topic-modeling-demo:latest && docker run -p 5003:5000 thekenken/topic-modeling-demo:latest
+```
+for M1 Macs:
+```bash
+docker buildx build --platform linux/amd64 -t thekenken/topic-modeling-demo:latest . && docker push thekenken/topic-modeling-demo:latest
+```
+
+for dev:
+```bash 
+docker build -t thekenken/topic-modeling-demo:dev . && docker run -p 5003:5000 thekenken/topic-modeling-demo:dev
+```
 
 ## About The Project
 
