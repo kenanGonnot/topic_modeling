@@ -23,17 +23,12 @@ def topic_modeling():
     content_type = request.headers.get('Content-Type')
     if content_type == 'application/json':
         data = request.get_json()
-        # data = json.loads(data)
+        data = json.loads(data)
         app.logger.debug(data)
         input_text = str(data['input_text'])
 
-        paragraph_topic_modeled, top_nearest_indices_by_clusters, cluster_image, data_lemmatized, tfIdf, feature_names = topic_extraction(
+        paragraph_topic_modeled, top_nearest_indices_by_clusters, cluster_image, data_lemmatized, df_results = topic_extraction(
             input_text, embedding_model)  # Topic modeling
-        print("=========================")
-        print("paragraph topic modeled : \n", paragraph_topic_modeled)
-        print("=========================")
-        print("top nearest indices by cluster : \n", top_nearest_indices_by_clusters)
-        print("=========================")
 
         app.logger.debug(top_nearest_indices_by_clusters)
         top_nearest_indices_by_clusters = np.array(top_nearest_indices_by_clusters).tolist()
@@ -41,13 +36,8 @@ def topic_modeling():
         encoded_image = base64.b64encode(cluster_image.read()).decode('utf-8')
 
         response = {
-            "input_text": input_text,
-            "paragraph_topic_modeled": paragraph_topic_modeled,
-            "top_nearest_indices_by_clusters": top_nearest_indices_by_clusters,
-            "cluster_images": encoded_image,
-            "data_lemmatized": data_lemmatized,
-            "tf_idf": tfIdf.toarray().tolist(),
-            "feature_names": feature_names
+            "cluster_image": encoded_image,
+            "df_results": df_results.to_dict()
         }
         return jsonify(response)
     else:

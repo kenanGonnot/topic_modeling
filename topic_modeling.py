@@ -136,7 +136,7 @@ def make_bigrams(texts, bigram_mod):
     return [bigram_mod[doc] for doc in texts]
 
 
-def make_trigrams(texts,bigram_mod, trigram_mod):
+def make_trigrams(texts, bigram_mod, trigram_mod):
     return [trigram_mod[bigram_mod[doc]] for doc in texts]
 
 
@@ -245,10 +245,20 @@ def topic_extraction(text, embed):
     data_lemmatized = preprocess_documents_tf_idf_(data_words, bigram_mod)
     tfIdf, feature_names = tf_idf(data_lemmatized)
 
-    print("tfIdf: ", tfIdf)
-    print("type of tfidf: ", type(tfIdf))
+    all_cluster = []
+    for i in range(len(data_lemmatized)):
+        probabilities = tfIdf[i].T.todense().A1.tolist()
+        print("probabilities shape", len(probabilities))
+        print("probabilities", probabilities)
+        print("feature name: ", len(feature_names))
+        df_tfidf = pd.DataFrame({"TF-IDF": probabilities, "word": feature_names})
+        df_tfidf = df_tfidf.sort_values('TF-IDF', ascending=False)
+        df_tfidf['cluster'] = i
+        all_cluster.append(df_tfidf.head(5))
 
-    return documents, top_nearest_indices_by_clusters, img, data_lemmatized, tfIdf, feature_names
+    result_df = pd.concat(all_cluster)
+
+    return documents, top_nearest_indices_by_clusters, img, data_lemmatized, result_df
 
 
 if __name__ == '__main__':
