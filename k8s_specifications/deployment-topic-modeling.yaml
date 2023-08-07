@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: topic-modeling
+  name: topic-modeling
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: topic-modeling
+  template:
+    metadata:
+      labels:
+        app: topic-modeling
+    spec:
+      containers:
+        - image: thekenken/topic-modeling-demo:latest
+          name: topic-modeling
+          imagePullPolicy: Always
+          #          resources:
+          #            requests:
+          #              cpu: 500m
+          #              memory: 512Mi
+          #            limits:
+          #              cpu: "4"
+          #              memory: 3Gi
+          ports:
+            - containerPort: 5003
+              name: topic-modeling
